@@ -1,0 +1,10 @@
+# HDFS
+
+
+
+
+
+# MapReduce
+
+
+## map
