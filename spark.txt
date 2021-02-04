@@ -1,0 +1,31 @@
+
+
+spark-submit 
+  -- class
+  -- master
+  -- deploy-mode 
+  <application-jar>
+  [appliccation-arguments]
+  
+  -- num-executors
+  -- totoal-executor-cores
+  -- executor-memory
+  
+  
+
+Application --------------------- Cluster Manager --------------------- Worker Node
+Driver                            Standalone                            Executor
+SparkContext                      Yarn                                  Task
+
+DAGScheduler 
+TaskScheduler
+Job -> Stage -> Task
+
+
+
+
+
+
+
+  
+  
