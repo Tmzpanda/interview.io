@@ -15,8 +15,8 @@
 
 ## 数据结构
 
-B树: 多路平衡查找树
-     内部节点有record pointer
+[B树](https://www.youtube.com/watch?v=aZjYr87r1b8&ab_channel=AbdulBari): 多路平衡查找树
+                                                                         内部节点有record pointer
      
 B+树: 内部节点无record pointer，只有叶子节点有record pointer -> 磁盘IO次数少，查询效率高              
       叶子节点LinkedList -> b+范围扫描简单，b则需要在叶子节点和内部节点往返移动
@@ -33,7 +33,7 @@ B+树: 内部节点无record pointer，只有叶子节点有record pointer -> �
 组合索引 - 只有在查询条件中使用了创建索引时的第一个字段，索引才会被使用
           最左匹配(col1, col2, col3) -> (col1), (col1, col2), (col1, col2, col3)
           
-ju
+聚集？？
           
 
 
@@ -49,8 +49,7 @@ ju
 """
 
 
-all the keys are preseented in the leaf nodes, record pointer will bee frrom only leaf nodes, leaf nodes form a linkedlist
-in non-leaf nodees there are duplicates
+
 
 
 
