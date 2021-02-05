@@ -23,13 +23,17 @@ Job -> Stage -> Task
 
 
 ## DAGScheduler 
-RDD - partitions in parallel
-      - 理想值：参考计算资源 k(#of executors * #of cores for each executor)
-      - 参数：sc.textFile(InputSplit), InputSplit把若干Block合并成一个分片，不能跨越文件
-      - reduce阶段 shuffle操作，聚合以后rdd的partition数和具体操作有关 
-      - reduceByKey(func, partitioner, numPartitions)
-      - partitionr - HashPartitioner(default), skew
-                   - RangePartioner(抽样，均衡分割点）
+RDD - partitions = tasks
+      - expected: k * (#of executors * #of cores for each executor)
+      - map
+          - sc.textFile(path, minPartitions), 
+          - 参数：sc.textFile(InputSplit), InputSplit把若干Block合并成一个分片，不能跨越文件
+      - reduce
+        - reduce阶段 shuffle操作，聚合以后rdd的partition数和具体操作有关 
+        - reduceByKey(func, numPartitions)
+        - reduceByKey(partitioner, func)
+        - partitionr - HashPartitioner(default), skew
+                     - RangePartioner(抽样，均衡分割点）
                       
       
     - When we apply a transformation on a RDD, the transformation is applied to each of its partition
