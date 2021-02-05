@@ -1,5 +1,6 @@
 # 运行原理
 
+```text
 spark-submit 
   -- class
   -- master
@@ -19,7 +20,7 @@ SparkContext                      Yarn                                  Task
 DAGScheduler 
 TaskScheduler
 Job -> Stage -> Task
-
+```
 
 
 ## DAGScheduler 
