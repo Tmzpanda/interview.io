@@ -28,10 +28,12 @@ RDD - partitions = tasks
       - map
           - HDFS -> sc.textFile(path, minPartitions) -> #of partition = max(#of blocks, minPartition)
       - reduce: reduce阶段，shuffle操作，聚合以后rdd的partition数和具体操作有关 
-          - aggregate, e.g.reduceByKey
+          - reduce的task个数 = stage第一个rdd(shuffledRDD)partition数，取决于Partitioner
+          - 聚合操作
             - 默认：spark.defalut.parallelism, spark.sql.shuffle.partitions
             - partitioner: reduceByKey(partitioner, func), reduceByKey(func, numPartitions)
           - join
+            - 
 
       - shuffle
         - partitionr - HashPartitioner(default) 数据倾斜
