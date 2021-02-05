@@ -26,14 +26,18 @@ Job -> Stage -> Task
 RDD - partitions = tasks
       - expected: k * (#of executors * #of cores for each executor)
       - map
-          - sc.textFile(path, minPartitions), 
-          - 参数：sc.textFile(InputSplit), InputSplit把若干Block合并成一个分片，不能跨越文件
-      - reduce
-        - reduce阶段 shuffle操作，聚合以后rdd的partition数和具体操作有关 
-        - reduceByKey(func, numPartitions)
-        - reduceByKey(partitioner, func)
-        - partitionr - HashPartitioner(default), skew
+          - HDFS -> sc.textFile(path, minPartitions) -> #of partition = max(#of blocks, minPartition)
+      - reduce: reduce阶段，shuffle操作，聚合以后rdd的partition数和具体操作有关 
+          - aggregate, e.g.reduceByKey
+            - 默认：spark.defalut.parallelism, spark.sql.shuffle.partitions
+            - partitioner: reduceByKey(partitioner, func), reduceByKey(func, numPartitions)
+          - join
+
+      - shuffle
+        - partitionr - HashPartitioner(default) 数据倾斜
                      - RangePartioner(抽样，均衡分割点）
+        - 
+          
                       
       
     - When we apply a transformation on a RDD, the transformation is applied to each of its partition
@@ -90,5 +94,5 @@ broadcast variable
 ## topK
 
 
-  
+            - 小文件：sc.textFile(InputSplit), InputSplit把若干Block合并成一个分片，不能跨越文件
   
