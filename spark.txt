@@ -1,4 +1,4 @@
-
+# 运行原理
 
 spark-submit 
   -- class
@@ -10,8 +10,7 @@ spark-submit
   -- num-executors
   -- totoal-executor-cores
   -- executor-memory
-  
-  
+    
 
 Application --------------------- Cluster Manager --------------------- Worker Node
 Driver                            Standalone                            Executor
@@ -23,8 +22,68 @@ Job -> Stage -> Task
 
 
 
+## DAGScheduler 
+RDD - partitions in parallel
+      - 理想值：参考计算资源 k(#of executors * #of cores for each executor)
+      - 参数：sc.textFile(InputSplit), InputSplit把若干Block合并成一个分片，不能跨越文件
+      - reduce阶段 shuffle操作，聚合以后rdd的partition数和具体操作有关 
+      - reduceByKey(func, partitioner, numPartitions)
+      - partitionr - HashPartitioner(default), skew
+                   - RangePartioner(抽样，均衡分割点）
+                      
+      
+    - When we apply a transformation on a RDD, the transformation is applied to each of its partition
+    - repartition() shuffles the data between the executors and divides the data into number of partitions, involves network traffic
+
+DAG - pipelining transformations converts the logical DAG into physical execution plan of several stages
+
+stage - task set - 一系列并发执行的tasks
+      - combination of transformations which does not cause any shuffling
+      - pipelining as many narrow transformations (eg: map, filter etc) as possible. -- parallize
+      - shuffle
+
+## TaskScheduler - task级别的调度
+                 - executor - partition个数
+                 -
 
 
+
+## Executor - 
+
+
+e.g. 计算资源：10 executors * 2 core(threads) for each executor -> 20 tasks(同一时刻可以并行20 tasks) 
+     任务：rdd of 100 partitions -> 100 tasks -> 计算这个rdd需要5个轮次
+
+
+
+broadcast variable
+
+
+
+## MapReduce
+
+
+
+
+
+
+
+
+# 接口
+
+## DataFrame DataSet
+
+## transformation - map, filter, reduceByKey, join
+   action - count, collect, take, foreach
+   
+   
+
+
+
+
+
+# 应用
+## topK
 
 
   
