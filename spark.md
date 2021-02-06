@@ -71,18 +71,17 @@ Job -> Stage -> Task
   - 解决方案
     - 预聚合 reduceByKey(combiner)代替groupByKey(没有combiner)
     - join
-      - teest
+      - co-partition [(id, score, email)](https://cloud.tencent.com/developer/article/1390312)
+      - broadcast + map
+      - 
 
 4. shuffle机制
-
-
-
 
 
 ## API
 1. transformation(lazy)
   - map, flatmap, mapPartitions
-  - reduceByKey, distinct, groupByKey, aggregateByKey, sortByKey, sortBy, coalesce, repartition, join, cogroup intersection, subtractByKey
+  - reduceByKey, distinct, groupByKey, aggregateByKey, sortByKey, sortBy, coalesce, repartition, join, cogroup, intersection, subtractByKey
   - cache, persist 
 2. action
   - reduce, count, take, collect, foreach
@@ -92,22 +91,20 @@ Job -> Stage -> Task
 
 
 ## 性能调优
-1. 重复使用的rdd持久化
+1. 重复使用rdd持久化（重新计算RDD的时间资源与缓存RDD的内存资源之间进行权衡）
 2. 高性能算子
   - 使用mapPartitions替代普通map，特别是在写DB的时候，避免每条写记录都new一个connection
   - 使用filter之后进行coalesce操作，减少小文件数量
 3. 解决数据倾斜
 
 
-2. 数据倾斜
 
 ## topK全局有序
 sortByKey + partitioner
 partitioner根据数据范围来分区，使得p1所有数据小于p2，p2所有数据小于p3, sortByKey保证partition内部有序
 
 
+## Streaming
+累加器一个比较经典的应用场景是用来在Spark Streaming应用中记录某些事件的数量。
 
-作者：0_9f3a
-链接：https://www.jianshu.com/p/61c0665fe0ba
-来源：简书
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
