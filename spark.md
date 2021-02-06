@@ -26,25 +26,22 @@ Job -> Stage -> Task
 # DAGScheduler 
   - RDD
   - DAG
-  - stage
+  - stage 
 
 # TaskScheduler
   - executor
   
-
-# 接口
+  
+# API
   - transformation
   - action
   
-# 广播变量
-
-# DataFrame DataSet
-
-# 对比MR
+# DataFrame 
+# DataSet
 
 
-# 应用
-  - topK
+# Streaming
+
 ```
 
 ## RDD partition个数 = task个数
@@ -70,13 +67,28 @@ Job -> Stage -> Task
   - 弊端：无法充分并行，oom
   - 解决方案
     - 预聚合 reduceByKey(combiner)代替groupByKey(没有combiner)
-    - join
-      -  [main repository](https://cloud.tencent.com/developer/article/1390312)
-      - broadcast + map
-      - 
+    - join避免shuffle
+      - co-partition (如果join之前，rdd1进行reduceByKey, 将此partitioner设置为另外一个rdd2的partitioner)
+      - broadcast + map (大小表)
+      - hot key  
+        - 几个数据量过大的key：采样倾斜key并分拆join操作，最后union。
+        - 大量倾斜key：两阶段聚合（局部聚合+全局聚合），将原本相同的key通过附加随机前缀的方式，变成多个不同的key，就可以让原本被一个task处理的数据分散到多个task上去做局部聚合，进而解决单个                        task处理数据量过多的问题。接着去除掉随机前缀，再次进行全局聚合，就可以得到最终的结果。
+                
+4. [shuffle机制（序列化，磁盘io，网络io）](https://zhuanlan.zhihu.com/p/70331869)
+  - HashShuffleManager
+    - consolidate机制
+  - SortShuffleManager
+    - 普通
+    - bypass机制
 
-4. shuffle机制
-
+## broadcast和accumulator
+1. broadcast
+  - cached on each executror rather than shipping with tasks
+  - 应用场景：broadcast+map代替join
+  
+2. 累加器
+  - 一个比较经典的应用场景是用来在Spark Streaming应用中记录某些事件的数量
+  
 
 ## API
 1. transformation(lazy)
@@ -88,8 +100,6 @@ Job -> Stage -> Task
   - saveAsTextFile
 
 
-
-
 ## 性能调优
 1. 重复使用rdd持久化（重新计算RDD的时间资源与缓存RDD的内存资源之间进行权衡）
 2. 高性能算子
@@ -98,13 +108,10 @@ Job -> Stage -> Task
 3. 解决数据倾斜
 
 
-
 ## topK全局有序
 sortByKey + partitioner
 partitioner根据数据范围来分区，使得p1所有数据小于p2，p2所有数据小于p3, sortByKey保证partition内部有序
 
 
-## Streaming
-累加器一个比较经典的应用场景是用来在Spark Streaming应用中记录某些事件的数量。
 
 
