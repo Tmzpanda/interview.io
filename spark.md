@@ -71,7 +71,7 @@ Job -> Stage -> Task
   - 解决方案
     - 预聚合 reduceByKey(combiner)代替groupByKey(没有combiner)
     - join
-      - co-partition [(id, score, email)](https://cloud.tencent.com/developer/article/1390312)
+      -  [main repository](https://cloud.tencent.com/developer/article/1390312)
       - broadcast + map
       - 
 
