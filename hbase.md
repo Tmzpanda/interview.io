@@ -42,7 +42,7 @@
   - HLog: 数据可靠性, WAL(write-ahead-log)
     - 每个Region Server都有一个HLog的实例。Region Server将更新操作（如Put，Delete）先记录到 WAL（HLog），然后将其写入Store的MemStore，最终MemStore会将数据写入到持久化的HFile。
   
-![hbase-architecture](/img/hbase-architecture.png)
+![hbase-architecture](/img/hbase-architecture.jpg)
 
 
 
