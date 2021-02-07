@@ -1,5 +1,3 @@
-# Hadoop
-
 
 
 ## HDFS
@@ -25,29 +23,30 @@
 
 
 ## MapReduce
-1.x/JobTracker/TaskTacker
-2.x/Yarn/resource manager/node manager/application master daemons
+1. 资源管理
+  - 1.x/JobTracker/TaskTacker
+  - 2.x/Yarn/resource manager/node manager/application master daemons
 
-mapper/extract info into k-v pairs/local disk输出数据在本地磁盘，等待reducer拉取
-combiner/local aggregation/save bandwidth
-
-partitioner/decide
-shuffle/transfer
-sort/merge
-reducer/aggregate/HDFS
+2.阶段
+  - mapper/extract info into k-v pairs/local disk输出数据在本地磁盘，等待reducer拉取
+  - combiner/local aggregation/save bandwidth
+  
+  - partitioner/decide
+  - shuffle/transfer
+  - sort/merge
+  - reducer/aggregate/HDFS
 
 
 ## Yarn
-job scheduling
-cluster resource management
+1. 功能
+  - job scheduling
+  - cluster resource management
 
-capacity scheduler/job submitted to specific queue/FIFO
-resource manager/node manager/application master
-
-NameNode/ResourceManager/HMaster
-DataNode/NodeManager/RegionServer
-
-
+2. 节点
+  - resource manager
+  - node manager -> application master  
+ 
+3. [资源调度过程](https://www.jianshu.com/p/2c2a1c79add9)
 
 
 ```
