@@ -22,14 +22,18 @@ Job -> Stage -> Task
 
 
 
-
 # DAGScheduler 
   - RDD
   - DAG
   - stage 
-
+  
 # TaskScheduler
   - executor
+  
+  
+# Shared variables
+  - broadcast
+  - accumulator
   
   
 # API
@@ -81,12 +85,12 @@ Job -> Stage -> Task
     - 普通
     - bypass机制
 
-## broadcast和accumulator
-1. broadcast
-  - cached on each executror rather than shipping with tasks
+## 共享变量
+1. broadcast：
+  - 在每台计算机上保留一个只读变量，而不是将其副本与任务一起发送。
   - 应用场景：broadcast+map代替join
-  
 2. 累加器
+  - 变量副本传到远程集群执行，这些变量更新不会传回driver（计算移动。driver可以读取累加器的值。
   - 一个比较经典的应用场景是用来在Spark Streaming应用中记录某些事件的数量
   
 
