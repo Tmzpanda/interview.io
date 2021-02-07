@@ -13,13 +13,13 @@
   - data node/store data as blocks/disk
     - SPOF/replicas
     
-2. 读写流程
+2. [读写流程](https://www.cnblogs.com/feiyumo/p/12541296.html)
 
 3. 小文件
   - 弊端：
     - metadata比例大
     - 框架消耗时间比例多
-  - 解决方案： merge
+  - 解决方案： [merge](https://blog.csdn.net/shudaqi2010/article/details/85237535)
 
 
 
