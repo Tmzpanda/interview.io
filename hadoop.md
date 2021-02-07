@@ -15,13 +15,40 @@
     
 2. 读写流程
 
+3. 小文件
+  - 弊端：
+    - metadata比例大
+    - 框架消耗时间比例多
+  - 解决方案： merge
 
 
 
-# MapReduce
+
+## MapReduce
+1.x/JobTracker/TaskTacker
+2.x/Yarn/resource manager/node manager/application master daemons
+
+mapper/extract info into k-v pairs/local disk输出数据在本地磁盘，等待reducer拉取
+combiner/local aggregation/save bandwidth
+
+partitioner/decide
+shuffle/transfer
+sort/merge
+reducer/aggregate/HDFS
 
 
-## map
+## Yarn
+job scheduling
+cluster resource management
+
+capacity scheduler/job submitted to specific queue/FIFO
+resource manager/node manager/application master
+
+NameNode/ResourceManager/HMaster
+DataNode/NodeManager/RegionServer
+
+
+
 
 ```
 
