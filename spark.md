@@ -40,6 +40,8 @@ Job -> Stage -> Task
   - transformation
   - action
   
+  
+  
 # DataFrame 
 # DataSet
 
@@ -118,7 +120,30 @@ Job -> Stage -> Task
 2. heap
 
 
-## [RDD, DF, DS](https://blog.csdn.net/muyingmiao/article/details/102963103)
+
+## RDD, DF, DS
+[详见](https://blog.csdn.net/muyingmiao/article/details/102963103)
+
+
+## Streaming
+
+```scala
+
+val query = df.writeStream
+  .option("checkpointLocation", "path/to/checkpoint/dir")
+  .outputMode("complete")                       // 输出模式
+  .trigger(Trigger.ProcessingTime("2 seconds")) 
+  .start()                                     
+
+query.awaitTermination()
+
+```
+1. 三种输出模式
+  - 附加模式（Append Mode）(default)：上一次触发之后新增加的行才会被写入外部存储，老数据有改动不适合该模式
+  - 更新模式（Update Mode）：上一次触发之后被更新的行才会被写入外部存储
+  - 完全模式（Complete Mode）：整个更新过的输出表都被写入外部存储
+  
+  
 
 
 
