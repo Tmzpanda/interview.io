@@ -113,9 +113,9 @@ Job -> Stage -> Task
 
 
 ## topK全局有序
-sortByKey + partitioner
+1. sortByKey + partitioner
 partitioner根据数据范围来分区，使得p1所有数据小于p2，p2所有数据小于p3, sortByKey保证partition内部有序
-
+2. heap
 
 
 
