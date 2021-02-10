@@ -5,7 +5,7 @@
 - [从输入网址到看到网页](https://blog.fundebug.com/2019/02/28/what-happens-from-url-to-webpage/)
 
 
-
+- [http状态码](https://www.runoob.com/http/http-status-codes.html)
 - [https工作流程](https://segmentfault.com/a/1190000019976390)
 - [TCP三次握手、四次握手](https://hit-alibaba.github.io/interview/basic/network/TCP.html)
 
