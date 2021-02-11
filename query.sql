@@ -26,7 +26,6 @@ SELECT db.getNthHighestSalary(10)
 
 
 
--- Window Funtion
 -- 184. Highest Salary For each Department
 WITH Temp(DepartmentId, MaxSalary) AS
 (
@@ -42,6 +41,7 @@ WHERE (Employee.DepartmentId, Salary) IN (SELECT Temp.DepartmentId, Temp.MaxSala
 
 
 -- 185. Top Three Salaries For each Department
+-- Window Funtion
 WITH Temp AS
 (
     SELECT *, DENSE_RANK() OVER(PARTITION BY DepartmentId ORDER BY Salary DESC) AS 'Rank'  
@@ -120,38 +120,6 @@ SELECT Users.user_id, Users.user_name, User_transaction.transaction,
 FROM Users
 JOIN User_transaction
 ON Users.user_id = User_transaction.user_id
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-## oa 几道题
-
-
-
-
-
 
 
 
