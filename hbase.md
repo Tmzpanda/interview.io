@@ -22,7 +22,7 @@
       - 2. 当 MemStore 中的数据需要向底层文件系统倾倒（Dump）时，Store便会创建StoreFile（对HFile一层封装），MemStore中的数据会最终写入到HFile中，也就是磁盘 IO。
       - 3. 由于HBase底层依靠HDFS，因此HFile都存储在HDFS 之中。
   - HLog: 数据可靠性, WAL(write-ahead-log)
-    - 每个Region Server都有一个HLog的实例。Region Server将更新操作（如Put，Delete）先记录到 WAL（HLog），然后将其写入MemStore，最终MemStore会将数据写入到持久化的HFile
+    - 每个Region Server都有一个HLog的实例。Region Server将更新操作（如Put，Delete）先记录到 WAL（HLog，磁盘顺序写很快），然后将其写入MemStore，最终MemStore会将数据写入到持久化的HFile
    
 
 ## [读写流程](https://zhuanlan.zhihu.com/p/65513466)
