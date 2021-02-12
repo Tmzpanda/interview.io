@@ -11,7 +11,6 @@ HA                           topic                       consumer group
                                                       
 
 ```
-
 ## producer
 1. producer在发送消息的时候，
   - 必须指定topic和data
@@ -27,14 +26,27 @@ HA                           topic                       consumer group
  
 
 ## broker
-1. controller：Kafka集群中的其中一个Broker会被选举为Controller，主要负责Partition管理和副本状态管理。
+1. Controller：Kafka集群中的其中一个Broker会被选举为Controller，主要负责Partition管理和副本状态管理。
   - 客户端创建一个topic时，只需要和zookeeper通信，设置partitions、replication-factor。
   - controller在ZooKeeper注册 watcher，当topic被创建，则controller会得到该topic的partition/replica分配。
   - 分配topic的partition，还要选出partition的leader，以及ISR等这些工作，都是由controller完成。
+  
+2. Group Coordinator: 每个Broker在启动的时候都会启动一个该服务
+  - 存储Group的相关Meta信息(发起consumer rebalance)
+  - 将对应Partition的Offset信息记录到Kafka内置Topic(__consumer_offsets)中
 
-2. 多个partition可以并行处理数据
-  - partition的leader才会进行读写操作，folower仅进行复制
-  - broker宕掉之后，从ISR(in-sync replica)列表中重新选举partition的leader
+3. Topic
+  - 多个partition可以并行处理数据
+    - partition的leader才会进行读写操作，folower仅进行复制。
+    - broker宕掉之后，从ISR(in-sync replica)列表中重新选举partition的leader。
+    
+  - [partition文件存储](https://tech.meituan.com/2015/01/13/kafka-fs-design-theory.html)
+    - 每个partition有多个segment files, 每个segment file有两部分：.index(元数据)和.log（多条message组成）
+    - message物理结构
+    
+  - [log清理策略](https://blog.csdn.net/abc123lzf/article/details/100738169)
+    - delete(default)
+    - compact
   
   
 
@@ -43,7 +55,7 @@ HA                           topic                       consumer group
 1. consumer group
   - consumer
     - 各个consumer控制和设置其在该partition下消费到offset位置，这样下次可以以该offset位置开始进行消费。
-    - 各个consumer的offset位置默认是在某一个broker当中的topic中保存的。
+    - 各个consumer的offset位置默认是在某一个broker当中的topic中保存的。(Group Coordinator负责) 
     
   - consumer instance个数和partition个数
     - consumer比partition少，一个consumer会对应于多个partitions
@@ -53,7 +65,7 @@ HA                           topic                       consumer group
     - 多个consumer instances从多个partition读到数据，kafka对多个partition间不保证数据间的顺序性，只保证在一个partition上数据是有序的。
     - rebalance
       - 增减consumer，partition会导致rebalance，所以rebalance后consumer instance对应的partition会发生变化
-      - Group Coordinator负责发起Consumer Rebalance, Group Leader（第一个加入consumer group的consumer）负责执行。
+      - Group Coordinator（每个broker都会启动的服务）负责发起Consumer Rebalance, Group Leader（第一个加入consumer group的consumer）负责执行。
       - 策略：
         - range
         - round robin
