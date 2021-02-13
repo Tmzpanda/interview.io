@@ -1,3 +1,5 @@
+
+
 ## 架构
   - Compiler：translate HQL into MapReduce
   - Metastore：central repository of metadata（schema on read, indexing)
@@ -26,6 +28,13 @@ create table t_bucket(id string) clustered by(id) into 3 buckets;
 insert into table t_bucket select id from test;	
 
 ```
+
+## 文件存储格式
+1. TextFile
+2. RCFile
+3. ORCFile
+4. Parquet
+
 
 
 ## HiveQL
