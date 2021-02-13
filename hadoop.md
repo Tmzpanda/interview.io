@@ -64,7 +64,7 @@
   - 1.x/JobTracker/TaskTacker
   - 2.x/Yarn/resource manager/node manager/application master daemons
 
-2.阶段
+2. 阶段
   - mapper/extract info into k-v pairs/local disk输出数据在本地磁盘，等待reducer拉取
   - combiner/local aggregation/save bandwidth
   
