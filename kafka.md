@@ -8,8 +8,8 @@ HA                           topic                       consumer group
 ```
 ## producer
 1. producer在发送消息的时候，
-  - 必须指定topic和data
-  - 可以选择指定key，相同key去往同一partition，不指定就round-robin
+  - ProducerRecord(String topic, K key, V value)
+  - 必须指定topic和data, 可选择指定key，相同key去往同一partition，不指定就round-robin
   - 每条消息都被append到patition中，属于顺序写磁盘（顺序写磁盘效率比随机写内存要高，保障kafka吞吐率）。
   
 2. HA
