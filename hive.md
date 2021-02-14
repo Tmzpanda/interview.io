@@ -1,9 +1,9 @@
-1. **<big>架构</big>**
+## 1. 架构
   - Compiler：translate HQL into MapReduce
   - Metastore：central repository of metadata (schema on read, indexing)
   
   
-2. [**表类型和文件格式**](https://blog.csdn.net/Thomson617/article/details/86153924)
+## 2. [表类型和文件格式](https://blog.csdn.net/Thomson617/article/details/86153924)
 ``` SQL
 CREATE TABLE page_view(viewTime INT, userid BIGINT, page_url STRING, referrer_url STRING, ip STRING COMMENT 'IP Address of the User')   -- 表类型，字段类型
 PARTITIONED BY (dt STRING, country STRING)   -- 分区
@@ -29,7 +29,7 @@ STORED AS SEQUENCEFILE;  -- 文件格式
     - AVRO
 
 
-3. **HiveQL**
+## 3. HiveQL
   - join:
     - (INNEER) JOIN, LEFT (OUTER) JOIN, LEFT SEMI JOIN, CROSS JOIN(笛卡尔积)，FUULL JOIN(不会MAPJOIN优化)
     - MAPJOIN: 大小表,会把小表全部读入内存中，在map阶段直接拿另外一个表的数据和内存中表数据做匹配，由于在map是进行了join操作，省去了reduce运行的效率也会高很多，默认启动优化
@@ -39,7 +39,7 @@ STORED AS SEQUENCEFILE;  -- 文件格式
     - RANK(), DENSE_RANK()
       
 
-4. **数据倾斜解决方案**
+## 4. 数据倾斜解决方案
   - map端预聚合
     - hive.map.aggr = true; 相当于combiner
     - hive.groupby.skewindata = true; 两阶段聚合，第一阶段随机分布预聚合，第二个阶段GroupByKey聚合。
