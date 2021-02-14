@@ -1,4 +1,4 @@
-1. **架构**
+1. **<big>架构</big>**
   - Compiler：translate HQL into MapReduce
   - Metastore：central repository of metadata (schema on read, indexing)
   
