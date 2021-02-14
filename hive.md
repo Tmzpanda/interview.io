@@ -19,15 +19,17 @@ STORED AS SEQUENCEFILE;  -- 文件格式
     - bucket: 分桶是相对分区进行更细粒度的划分，属性哈希值对BUCKET个数取模，设置hive.enforce.bucketiong=true.
 
   - 文件存储格式：
-    - TEXTFILE (default)
-    - SEQUENCEFILE
+    - TEXTFILE (default)：数据不做压缩。
+    - SEQUENCEFILE：行存储，二进制文件，以K-V的形式序列化到文件里，可压缩和可分割。
+    - AVRO：行存储，数据序列化方案。schema存储在JSON格式中，数据以二进制方式存储，文件尺寸最小同时效率最高。
     - ORC
-      - 优点：按行分块，按列存储，压缩率比parquet高（parquet数据schema更为复杂）
+      - 优点：按行分块，按列存储，压缩率比parquet高（parquet数据schema更为复杂），查询效率高。
       - 缺点：不支持嵌套数据（但可通过复杂数据类型如map<k,v>间接实现），不支持字段扩展。Impala不支持ORC，使用Parquet作为主要的列式存储格式。
     - PARQUET
-      - 优点：二进制，自解析（metadata），列式存储，snappy压缩，支持嵌套数据格式，支持字段扩展。    
-      - 缺点：压缩率比ORC低，查询效率ORC低，不支持update, insert和ACID.
-    - AVRO
+      - 优点：二进制，自解析（metadata），列式存储，snappy压缩，支持嵌套数据格式，支持字段扩展。
+             支持谓词下推（predicate pushdown，从磁盘读取数据就过滤数据记录，而不是载入内存再过滤），可以进一步降低磁盘I/O开销。 
+      - 缺点：压缩率比ORC低，查询效率比ORC低，不支持update, insert和ACID.
+
 
 
 ## 3. HiveQL
