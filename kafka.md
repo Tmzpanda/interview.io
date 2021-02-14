@@ -4,6 +4,12 @@ Producer ------------------- Broker  ------------------- Consumer
 HA                           topic                       consumer group
                              partitions                  API
 
+
+API
+- Producer
+- Consumer 
+- Streams (topics -> Streams -> topics) 
+- Connector (连接到已存在的应用程序或者数据系统(生产者或者消费者))
                                                    
 ```
 ## producer
