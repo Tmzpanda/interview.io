@@ -1,15 +1,10 @@
+## 架构
 ```
 Producer ------------------- Broker  ------------------- Consumer
 HA                           topic                       consumer group
                              partitions                  API
-                       
-                  
-## Message queue
 
-## Structured streaming read from kafka
-
-                                                      
-
+                                                   
 ```
 ## producer
 1. producer在发送消息的时候，
@@ -93,21 +88,5 @@ HA                           topic                       consumer group
   
 
 
-## structured streaming read from kafka
-```scala
-val df = spark
-  .readStream
-  .format("kafka")
-  .option("kafka.bootstrap.servers", "host1:port1,host2:port2")
-  .option("subscribe", "topic1,topic2")           // multiple topics
-  .option("startingOffsets", """{"topic1":{"0":23,"1":-2},"topic2":{"0":-2}}""")
-  .option("endingOffsets", """{"topic1":{"0":50,"1":-1},"topic2":{"0":-1}}""")
-  .load()                                         // default #of consumer instances = #of partition number = #of topic partitions
-
-  
-df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
-  .as[(String, String)
-
-```
 
 
