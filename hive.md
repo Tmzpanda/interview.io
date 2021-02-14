@@ -1,4 +1,5 @@
 ## 1. 架构
+![hive-architecture](img/hive-architecture.png)
   - Compiler：translate HQL into MapReduce
   - Metastore：central repository of metadata (schema on read, indexing)
   
