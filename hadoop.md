@@ -11,16 +11,16 @@
       - 解决方案：merge: [Hadoop Archive，Sequence file和CombineFileInputFormat](https://developer.aliyun.com/article/373605).
 
 ## 2. node、读写流程
-  - name node/metadata/memory
+  - 1. name node/metadata/memory
      - SPOF
         - 1.x secondary namenode/checkpoint/fsimage and edits
         - 2.x HA standby namenode
      - HDFS Federation/multiple independent namenodes
 
-  - data node/store data as blocks/disk
+  - 2. data node/store data as blocks/disk
     - SPOF/replicas
     
-  - 读写流程
+  - 3. 读写流程
     - 读：
       - 1. client端发送读文件请求给namenode，如果文件不存在，返回错误信息，否则，将该文件对应的block及其所在datanode位置发送给client。
       - 2. client收到文件位置信息后，与不同datanode建立socket连接并行获取数据。
