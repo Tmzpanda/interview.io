@@ -2,6 +2,10 @@
 1. 逻辑上：row-key, column family, column qualifier, version(timestamp)
 2. 物理上：HFile按CF存储，按照Row-key将相关CF中的列关联起来。然后当用户按照Row-key查询数据的时候，HBase会遍历多个HFile，通过相同的Row-Key标识，将相关的单元格组织成行返回。
  
+ 
+## 架构
+![hbase-architecture](img/hbase-architecture.jpg)
+
 
 ## HBase集群
 1. Zookeeper
