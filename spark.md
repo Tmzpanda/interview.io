@@ -127,6 +127,26 @@ Job -> Stage -> Task
 
 ## Streaming
 
+
+- structured streaming read from kafka
+```scala
+val df = spark
+  .readStream
+  .format("kafka")
+  .option("kafka.bootstrap.servers", "host1:port1,host2:port2")
+  .option("subscribe", "topic1,topic2")           // multiple topics
+  .option("startingOffsets", """{"topic1":{"0":23,"1":-2},"topic2":{"0":-2}}""")
+  .option("endingOffsets", """{"topic1":{"0":50,"1":-1},"topic2":{"0":-1}}""")
+  .load()                                         // default #of consumer instances = #of partition number = #of topic partitions
+
+  
+df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
+  .as[(String, String)
+
+```
+
+
+- write stream to hbase
 ```scala
 
 val query = df.writeStream
@@ -138,12 +158,12 @@ val query = df.writeStream
 query.awaitTermination()
 
 ```
-1. 三种输出模式
-  - 附加模式（Append Mode）(default)：上一次触发之后新增加的行才会被写入外部存储，老数据有改动不适合该模式
-  - 更新模式（Update Mode）：上一次触发之后被更新的行才会被写入外部存储
-  - 完全模式（Complete Mode）：整个更新过的输出表都被写入外部存储
-  
-  
+  - 三种输出模式
+    - 附加模式（Append Mode）(default)：上一次触发之后新增加的行才会被写入外部存储，老数据有改动不适合该模式
+    - 更新模式（Update Mode）：上一次触发之后被更新的行才会被写入外部存储
+    - 完全模式（Complete Mode）：整个更新过的输出表都被写入外部存储
+
+
 
 
 
