@@ -64,7 +64,7 @@
   - reducer/aggregate/HDFS
 
 
-## Yarn
+# Yarn
 1. 功能
   - job scheduling
   - cluster resource management
