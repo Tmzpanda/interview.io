@@ -109,7 +109,7 @@ spark-submit
         - 大量倾斜key：两阶段聚合（局部聚合+全局聚合），将原本相同的key通过附加随机前缀的方式，变成多个不同的key，就可以让原本被一个task处理的数据分散到多个task上去做局部聚合，进而解决单个                        task处理数据量过多的问题。接着去除掉随机前缀，再次进行全局聚合，就可以得到最终的结果。
                 
 4. [shuffle机制（序列化，磁盘io，网络io）](https://zhuanlan.zhihu.com/p/70331869)
-  - HashShuffleManager
+  - HashShuffleManager（弃用）
     - consolidate机制
   - SortShuffleManager
     - 普通
