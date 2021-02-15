@@ -11,6 +11,9 @@ Job -> Stage -> Task
 
 ```
 ---
+
+
+
 ## 运行原理
 1. 流程：
   - 构建SparkApplication的运行环境（启动SparkContext），SparkContext向ResourceManager（可以是Standalone、YARN）注册并申请运行Executor资源。（Application不能跨应用程序共享数据）
@@ -52,7 +55,8 @@ spark-submit
   - 一个job根据宽依赖划分成多个stage
   - stage内部多个tasks（stage内部窄依赖，pipeline），然后这些task提交给executor进行计算执行（结果返回给Driver汇总或存储）。
   
-  
+ 
+ 
 ---
 ## RDD 
 1. partition
@@ -70,8 +74,8 @@ spark-submit
   
 3. transformations & actions
   - transformation(lazy)
-    - map, flatmap, mapPartitions
-    - reduceByKey, distinct, groupByKey, aggregateByKey, sortByKey, sortBy, coalesce, repartition, join, cogroup, intersection, subtractByKey
+    - map, flatmap(一对多), mapPartitions
+    - reduceByKey（预聚合）, distinct, groupByKey, aggregateByKey, sortByKey, sortBy, coalesce, repartition, join, cogroup, intersection, subtractByKey
     - cache, persist 
       - cache = persist(MEMORY_ONLY)
       - persist指定缓存方式: MEMORY_ONLY, MEMORY_AND_DISK, MEMORY_ONLY_SER, MEMORY_AND_DISK_SER, DISK_ONLY
@@ -132,6 +136,9 @@ spark-submit
   
   
 
+
+
+
 ---
 
 ## MapReduce vs Spark
@@ -156,7 +163,6 @@ spark-submit
 
 # Streaming
 
-
 - structured streaming read from kafka
 ```scala
 val df = spark
@@ -167,26 +173,44 @@ val df = spark
   .option("startingOffsets", """{"topic1":{"0":23,"1":-2},"topic2":{"0":-2}}""")
   .option("endingOffsets", """{"topic1":{"0":50,"1":-1},"topic2":{"0":-1}}""")
   .load()                                         // default #of consumer instances = #of partition number = #of topic partitions
-
   
-df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
-  .as[(String, String)
+df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")   
+  .as[(String, String)]                           // k-v
 
 ```
+
+- stream operations
+```scala
+
+val windowedCounts = words
+    .withWatermark("timestamp", "10 minutes")               // watermark: 在12:20trigger时, watermark 为 12:21 - 10m = 12:11，所以late data (12:04, donkey)丢弃了。
+    .groupBy(
+        window($"timestamp", "10 minutes", "5 minutes"),    // window: 窗口大小10分钟，每5分钟trigger一次
+        $"word")
+    .count()
+
+```
+  - window: aggregation 
+  - watermark: late data(ProcessingTime比EventTime晚），更新其对应的ResultTable的记录。
+  
 
 
 - write stream to hbase
 ```scala
-
 val query = df.writeStream
   .option("checkpointLocation", "path/to/checkpoint/dir")
-  .outputMode("complete")                       // 输出模式
-  .trigger(Trigger.ProcessingTime("2 seconds")) 
+  .trigger(Trigger.ProcessingTime("10 seconds"))  // trigger
+  .foreach(writeToHBase)          //
+  .outputMode("complete")                         // 输出模式
   .start()                                     
-
-query.awaitTermination()
+  .awaitTermination()
 
 ```
+
+  - trigger模式
+    - micro-batch(default): exactly-once 语义。原因是因为在input端和output端都做了很多工作来进行保证幂等。
+    - continuous mode: at-least-once(处理完才commit, 处理错误会重操作。需要保证幂等性（两次处理不会影响系统）)
+    
   - 三种输出模式
     - 附加模式（Append Mode）(default)：上一次触发之后新增加的行才会被写入外部存储，老数据有改动不适合该模式
     - 更新模式（Update Mode）：上一次触发之后被更新的行才会被写入外部存储
