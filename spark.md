@@ -1,16 +1,5 @@
-# Spark
-```
-spark-submit 
-  -- class
-  -- master
-  -- deploy-mode 
-  <application-jar>
-  [appliccation-arguments]
-  
-  -- num-executors
-  -- totoal-executor-cores
-  -- executor-memory
-    
+## 架构
+```   
 
 Application --------------------- Cluster Manager --------------------- Worker Node
 Driver                            Standalone                            Executor
@@ -20,45 +9,80 @@ DAGScheduler
 TaskScheduler
 Job -> Stage -> Task
 
-
-
-# DAGScheduler 
-  - RDD
-  - DAG
-  - stage 
-  
-# TaskScheduler
-  - executor
-  
-  
-# Shared variables
-  - broadcast
-  - accumulator
-  
-  
-# API
-  - transformation
-  - action
-  
-  
-  
-# DataFrame 
-# DataSet
-
-
-# Streaming
-
 ```
+---
+## 运行原理
+1. 流程：
+  - 构建SparkApplication的运行环境（启动SparkContext），SparkContext向ResourceManager（可以是Standalone、YARN）注册并申请运行Executor资源。（Application不能跨应用程序共享数据）
+  - DAGScheduler构建成DAG图，将DAG图分解成Stage，并把Taskset发送给TaskScheduler(内部维护一个任务队列，根据FIFO或Fair策略，调度任务)。
+  - TaskScheduler将Task发放给Executor运行，同时SparkContext将应用程序代码发放给Executor（计算移动）。
 
-## RDD partition个数 = task个数
-1. 理论上最好是k * (#of executors * #of cores for each executor)，充分利用集群资源
-2. 实际上
-  - 在map端，比如读取HDFS数据，sc.textFile(path, minPartitions)，partition个数默认block数，如果指定minPartitions则为该值
-  - reduce端，task个数 = stage第一个rdd(shuffledRDD)partition数，该值又取决于Partitioner，默认参数spark.defalut.parallelism, spark.sql.shuffle.partitions，
-    可以显示指定，比如reduceByKey(partitioner, func), reduceByKey(func, numPartitions)
+2. 参数
+```txt
+spark-submit 
+  -- class
+  -- master           // master URL for the cluster
+  -- deploy-mode      // client or cluster
+  <application-jar>
+  [appliccation-arguments]
+  
+  -- num-executors
+  -- totoal-executor-cores  
+  -- executor-memory
+  
+```
+  - deploy-mode
+    - client(default): Driver进程运行在Master节点上
+      - 适合Master和Worker集群在同一个网络内；
+      - Driver进程运行在Master节点上, 没有监督重启机制，Driver进程如果挂了，需要额外的程序重启; 
+      - 适合REPL交互（spark shell）
+    - cluster: Driver程序在worker集群中某个节点
+      - minimize network latency between the drivers and the executors
+      - Master可以使用–supervise对Driver进行监控，如果Driver挂了可以自动重启
+
+
+## DAG
+1. 宽窄依赖        
+  ![wide-narrow-dependency](img/shuffle.png)
+  - 宽依赖：一个父RDD partition对应多个子RDD partition, 有shuffle(一个父分区经过shuffle划分到子RDD不同分区)
+  - 窄依赖：一个父RDD partition对应一个子RDD partition.
+  
+2. stage
+  - 一个action会生成一个job
+  - 一个job根据宽依赖划分成多个stage
+  - stage内部多个tasks（stage内部窄依赖，pipeline），然后这些task提交给executor进行计算执行（结果返回给Driver汇总或存储）。
   
   
-## shuffle
+---
+## RDD 
+1. partition
+  - partition个数 = task个数
+  - 理论上最好是k * (#of executors * #of cores for each executor)，充分利用集群资源
+  - 实际上
+    - 在map端，比如读取HDFS数据，sc.textFile(path, minPartitions)，partition个数默认block数，如果指定minPartitions则为该值
+    - reduce端，task个数 = stage第一个rdd(shuffledRDD)partition数，该值又取决于Partitioner，默认参数spark.defalut.parallelism, spark.sql.shuffle.partitions，
+      可以显示指定，比如reduceByKey(partitioner, func), reduceByKey(func, numPartitions)
+      
+2. 容错性(Resilient)
+  - 基于lineage: 一个RDD出错，那么可以从它的所有父RDD重新计算所得，如果一个RDD仅有一个父RDD（即窄依赖）,那么这种重新计算的代价会非常小。
+  - 基于checkpoint: 宽依赖得到的结果是很昂贵的，Spark将此结果持久化到磁盘上了，以备后面使用。
+  
+  
+3. transformations & actions
+  - transformation(lazy)
+    - map, flatmap, mapPartitions
+    - reduceByKey, distinct, groupByKey, aggregateByKey, sortByKey, sortBy, coalesce, repartition, join, cogroup, intersection, subtractByKey
+    - cache, persist 
+      - cache = persist(MEMORY_ONLY)
+      - persist指定缓存方式: MEMORY_ONLY, MEMORY_AND_DISK, MEMORY_ONLY_SER, MEMORY_AND_DISK_SER, DISK_ONLY
+      - persist、cache与checkpoint的区别：persist持久化不改变lineage, checkpoint执行后只有一个checkpointRDD；persist持久化到磁盘或内存，checkpoint通常保存到hdfs
+
+  - action
+    - reduce, count, take, collect, foreach
+    - saveAsTextFile
+    
+
+## Shuffle
 1. partitioner
   - HashPartitioner(default), 算法hash(key)% reduce tasks, 数据倾斜
   - RangePartioner(采样，均衡分割点）
@@ -87,23 +111,6 @@ Job -> Stage -> Task
     - 普通
     - bypass机制
 
-## 共享变量
-1. broadcast：
-  - 在每台计算机上保留一个只读变量，而不是将其副本与任务一起发送。
-  - 应用场景：broadcast+map代替join
-2. 累加器
-  - 变量副本传到远程集群执行，这些变量更新不会传回driver（计算移动)。driver可以读取累加器的值。
-  - 一个比较经典的应用场景是用来在Spark Streaming应用中记录某些事件的数量
-  
-
-## API
-1. transformation(lazy)
-  - map, flatmap, mapPartitions
-  - reduceByKey, distinct, groupByKey, aggregateByKey, sortByKey, sortBy, coalesce, repartition, join, cogroup, intersection, subtractByKey
-  - cache, persist 
-2. action
-  - reduce, count, take, collect, foreach
-  - saveAsTextFile
 
 
 ## 性能调优
@@ -114,6 +121,26 @@ Job -> Stage -> Task
 3. 解决数据倾斜
 
 
+  
+## Shared variables
+1. broadcast：
+  - 在每台计算机上保留一个只读变量，而不是将其副本与任务一起发送。
+  - 应用场景：broadcast+map代替join
+2. accumulator
+  - 变量副本传到远程集群执行，这些变量更新不会传回driver（计算移动)。driver可以读取累加器的值。
+  - 一个比较经典的应用场景是用来在Spark Streaming应用中记录某些事件的数量  
+  
+  
+
+---
+
+## MapReduce vs Spark
+1. 运算：MapReduce基于磁盘（中间结果落到磁盘，IO、序列化反序列化开销大），SparkRDD基于内存（存取速度快）
+2. 编程范式：Map+Reduce vs Transformation+Action
+3. Task: MapReduce task以进程维护（数秒启动），Spark以线程维护
+
+  
+
 ## topK全局有序
 1. sortByKey + partitioner
   - partitioner根据数据范围来分区，使得p1所有数据小于p2，p2所有数据小于p3, sortByKey保证partition内部有序
@@ -121,11 +148,13 @@ Job -> Stage -> Task
 
 
 
+---
+  
 ## RDD, DF, DS
 [详见](https://blog.csdn.net/muyingmiao/article/details/102963103)
 
 
-## Streaming
+# Streaming
 
 
 - structured streaming read from kafka
