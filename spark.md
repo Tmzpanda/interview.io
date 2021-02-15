@@ -180,6 +180,7 @@ df.selectExpr("CAST(key AS STRING)", "CAST(value AS STRING)")
 ```
 
 - stream operations
+
 ```scala
 
 val windowedCounts = words
@@ -189,10 +190,13 @@ val windowedCounts = words
         $"word")
     .count()
 
+
+/*
+- window: aggregation 
+- watermark: late data(ProcessingTime比EventTime晚），更新其对应的ResultTable的记录。
+
+*/
 ```
-  - window: aggregation 
-  - watermark: late data(ProcessingTime比EventTime晚），更新其对应的ResultTable的记录。
-  
 
 
 - write stream to hbase
@@ -205,16 +209,21 @@ val query = df.writeStream
   .start()                                     
   .awaitTermination()
 
+
+/*
+- trigger模式
+  - micro-batch(default): exactly-once 语义。原因是因为在input端和output端都做了很多工作来进行保证幂等。
+  - continuous mode: at-least-once(处理完才commit, 处理错误会重操作。需要保证幂等性（两次处理不会影响系统）)
+
+- 三种输出模式
+  - 附加模式（Append Mode）(default)：上一次触发之后新增加的行才会被写入外部存储，老数据有改动不适合该模式
+  - 更新模式（Update Mode）：上一次触发之后被更新的行才会被写入外部存储
+  - 完全模式（Complete Mode）：整个更新过的输出表都被写入外部存储
+  
+*/
 ```
 
-  - trigger模式
-    - micro-batch(default): exactly-once 语义。原因是因为在input端和output端都做了很多工作来进行保证幂等。
-    - continuous mode: at-least-once(处理完才commit, 处理错误会重操作。需要保证幂等性（两次处理不会影响系统）)
-    
-  - 三种输出模式
-    - 附加模式（Append Mode）(default)：上一次触发之后新增加的行才会被写入外部存储，老数据有改动不适合该模式
-    - 更新模式（Update Mode）：上一次触发之后被更新的行才会被写入外部存储
-    - 完全模式（Complete Mode）：整个更新过的输出表都被写入外部存储
+
 
 
 
