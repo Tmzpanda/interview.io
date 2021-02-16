@@ -20,9 +20,11 @@
 
 # OS
 
-- [虚拟内存调度](https://blog.csdn.net/Bob__yuan/article/details/102584606)
+- [虚拟内存调度](https://blog.csdn.net/Bob__yuan/article/details/102584606) 
+
 - [进程和线程的区别](https://blog.csdn.net/mxsgoden/article/details/8821936)
-- [线程的状态](https://www.liaoxuefeng.com/wiki/1252599548343744/1306580742045730)    
+- [线程的状态](https://www.liaoxuefeng.com/wiki/1252599548343744/1306580742045730)  
+
 - [变量作用域和生命周期](https://blog.csdn.net/u012679707/article/details/80188124)
 
 
