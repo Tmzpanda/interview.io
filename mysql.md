@@ -2,7 +2,12 @@
 ![mysql-architecture](img/mysql-architecture.jpg)
 
 
-## InnoDB vs MyISAM
+
+
+## 读写
+1. redo log
+
+## 存储引擎InnoDB vs MyISAM
 
 
 ## 索引
@@ -76,8 +81,16 @@
 
 
 
+3. Query执行顺序：
+    - 1. FROM xx JOIN xx ON xx WHERE xx
+    - 2. GROUP BY xx SUM(xx) HAVING xx
+    - 3. SELECT DISTINCT xx ORDER BY xx
+
+4. 查询很慢
 
 
+
+## Partition
 
 
 
