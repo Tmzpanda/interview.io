@@ -163,7 +163,6 @@ WITH Temp AS
     RIGHT JOIN Items 
     ON Orders.item_id = Items.item_id
     GROUP BY Items.item_category, DATENAME(w, Orders.order_date)
-
 )
 SELECT Category, ISNULL([Monday], 0) Monday , ISNULL([Tuesday], 0) Tuesday, ISNULL([Wednesday], 0) Wednesday, ISNULL([Thursday], 0) Thursday, ISNULL([Friday], 0) Friday, ISNULL([Saturday], 0) Saturday, ISNULL([Sunday], 0) Sunday		
 FROM Temp PIVOT(MAX(Quantity) FOR Weekday IN ([Monday], [Tuesday], [Wednesday], [Thursday], [Friday], [Saturday], [Sunday])) P;		  -- PIVOT
