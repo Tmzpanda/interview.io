@@ -1,9 +1,9 @@
 ## 架构
 ```   
 
-Application --------------------- Cluster Manager --------------------- Worker Node
-Driver                            Standalone                            Executor
-SparkContext                      Yarn                                  Task
+Application --------------------- Cluster Manager --------- Worker Node
+Driver                            Standalone                Executor
+SparkContext                      Yarn                      Task
 
 DAGScheduler 
 TaskScheduler
