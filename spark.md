@@ -63,7 +63,7 @@ spark-submit
   - partition个数 = task个数
   - 理论上最好是k * (#of executors * #of cores for each executor)，充分利用集群资源
   - 实际上
-    - 在map端，比如读取HDFS数据，sc.textFile(path, minPartitions)，partition个数默认block数，如果指定minPartitions则为该值
+    - 在map端，比如读取HDFS数据，sc.textFile(path, minPartitions)，partition个数默认block数，可以通过指定minPartitions提升并行度。
     - reduce端，task个数 = stage第一个rdd(shuffledRDD)partition数，该值又取决于Partitioner，默认参数spark.defalut.parallelism, spark.sql.shuffle.partitions，
       可以显示指定，比如reduceByKey(partitioner, func), reduceByKey(func, numPartitions)
       
