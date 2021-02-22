@@ -81,16 +81,20 @@
 2. 表操作
     - DQL(query)
     - DML(manipulation): 插入，更新，删除
-    - DDL(definition): 表，视图，索引
+    - DDL(definition): 创建表，视图，索引
     - DCL(control): commit, rollback
 
 
 3. DQL(query)
-    - SQL
+    - 语法：
+        - SELECT DISTINCT xx
+        - FROM xx JOIN xx ON xx WHERE xx
+        - GROUP BY xx SUM(xx) HAVING xx ORDER BY xx
+
     - 执行顺序：
         - 1. FROM xx JOIN xx ON xx WHERE xx
         - 2. GROUP BY xx SUM(xx) HAVING xx
-        - 3. SELECT DISTINCT xx ORDER BY xx
+        - 3. SELECT DISTINCT xx ORDER BY xx DESC
 
     - [查询很慢](https://www.cnblogs.com/kubidemanong/p/10734045.html)
         - 偶尔很慢：
@@ -114,6 +118,9 @@
     - horizontal水平分区
         - [种类：RANGE, LIST, HASH, composite](https://blog.csdn.net/u013096088/article/details/72821849)
         - 算法：[一致性哈希](https://segmentfault.com/a/1190000021199728)
+            - 哈希环，只有少部分对象需要重新分配（对比简单取模，添加服务器，大部分缓存失效）
+            - 虚拟节点：解决负载不均衡
+            
         
     - vertical垂直分区（MySQL不支持，HBase支持）
 
