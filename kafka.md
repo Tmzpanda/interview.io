@@ -20,7 +20,7 @@ API
   
 2. HA
   - ack=0, producer won't wait for acknowledgement(possible data loss)
-  - ack=1, leader acknowledgement (limited data loss)
+  - ack=1(default), leader acknowledgement (limited data loss)
   - ack=all, leader+replica acknowledgement (no data loss)
   
    
