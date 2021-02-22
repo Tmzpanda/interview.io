@@ -60,7 +60,7 @@ WHERE (Employee.DepartmentId, Salary) IN (SELECT Temp.DepartmentId, Temp.MaxSala
 -- 185. Top Three Salaries For each Department
 WITH Temp AS
 (
-    SELECT *, DENSE_RANK() OVER(PARTITION BY DepartmentId ORDER BY Salary DESC) AS 'Rank'  	-- DENSE_RANK()
+    SELECT *, DENSE_RANK() OVER(PARTITION BY DepartmentId ORDER BY Salary DESC) AS 'Rank'  	-- DENSE_RANK() window function
     FROM Employee  
 )
 SELECT Department.Name AS Department, Temp.Name AS Employee, Temp.Salary 
@@ -143,10 +143,7 @@ User_transaction AS
     GROUP BY user_id
 )
 SELECT Users.user_id, Users.user_name, User_transaction.transaction,
-     CASE 
-          WHEN Users.credit + User_transaction.transactions > 0 THEN 'No'
-          ELSE 'Yes'
-      END AS 'credit_limit_breached'
+     CASE WHEN Users.credit + User_transaction.transactions > 0 THEN 'No' ELSE 'Yes' END AS 'credit_limit_breached'
 FROM Users
 JOIN User_transaction
 ON Users.user_id = User_transaction.user_id
