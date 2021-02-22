@@ -90,6 +90,14 @@
         - SELECT DISTINCT xx
         - FROM xx JOIN xx ON xx WHERE xx
         - GROUP BY xx SUM(xx) HAVING xx ORDER BY xx
+    - 函数：
+        - 时间：
+            - 格式转换：
+                - MySQL -> [DATE_FORMAT](https://www.w3school.com.cn/sql/func_date_format.asp)('2021-02-20', '%Y-%m -> %W')
+                - SQL Server -> [DATENAME](https://www.w3school.com.cn/sql/func_datepart.asp)(w, '2021-02-20')
+            - 比较：MIN, MAX
+        - 窗口：DENSE_RANK() OVER(PARTITION BY DepartmentId ORDER BY Salary DESC) AS 'Rank'
+        - 其他：[CAST](https://www.w3schools.com/sql/func_mysql_cast.asp)(x AS DATATYPE), [CONCAT](https://www.w3schools.com/sql/func_mysql_concat.asp)(x, x, x)
 
     - 执行顺序：
         - 1. FROM xx JOIN xx ON xx WHERE xx
