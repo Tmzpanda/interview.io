@@ -68,7 +68,7 @@ spark-submit
       可以显示指定，比如reduceByKey(partitioner, func), reduceByKey(func, numPartitions)
       
 2. 容错性(Resilient)
-  - 基于lineage: 一个RDD出错，那么可以从它的所有父RDD重新计算所得，如果一个RDD仅有一个父RDD（即窄依赖）,那么这种重新计算的代价会非常小。
+  - 基于lineage: 一个RDD出错，那么可以从它的所有父RDD重新计算所得。如果一个RDD仅有一个父RDD（即窄依赖）,那么这种重新计算的代价会非常小。
   - 基于checkpoint: 宽依赖得到的结果是很昂贵的，Spark将此结果持久化到磁盘上了，以备后面使用。
   
   
