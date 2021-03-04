@@ -43,6 +43,9 @@
         - 只有在查询条件中使用了创建索引时的第一个字段，索引才会被使用。
         - 最左匹配(col1, col2, col3) -> (col1), (col1, col2), (col1, col2, col3)
 
+4. 设计原则
+    - where查询
+    - join公共列
 
 
 ## 事务
@@ -99,7 +102,7 @@
         - 窗口：DENSE_RANK() OVER(PARTITION BY DepartmentId ORDER BY Salary DESC) AS 'Rank'
         - 其他：[CAST](https://www.w3schools.com/sql/func_mysql_cast.asp)(x AS DATATYPE), [CONCAT](https://www.w3schools.com/sql/func_mysql_concat.asp)(x, x, x)
 
-    - 执行顺序：
+    - 执行顺序EXPLAIN：
         - 1. FROM xx JOIN xx ON xx WHERE xx
         - 2. GROUP BY xx SUM(xx) HAVING xx
         - 3. SELECT DISTINCT xx ORDER BY xx DESC
