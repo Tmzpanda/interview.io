@@ -78,3 +78,32 @@ VM vs Docker vs Container
 - ECS
 
 
+
+
+command to deploy website 
+```shell
+
+zip
+s3/bucket and object public
+ec2/http port80
+sudo su
+yum update
+yum install httpd -y
+cd /var/www/html
+wget https://webserver-tmzpanda.s3.amazonaws.com/website.zip
+unzip website.zip
+mv website/* .
+service httpd start
+
+
+
+
+
+sudo su
+yum update -y
+yum install -y httpd.x86_64
+systemctl start httpd.service
+systemctl enable httpd.service
+curl localhost:80
+
+```
