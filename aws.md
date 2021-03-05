@@ -28,3 +28,53 @@ EC2/security/timeout/dependencies/scalability feature/on-demand/cold start-up la
 ECS/docker daemon/task definition metadata
 Kinesis/Kafka
 DynamoDB/document database/HBase/column-based
+
+
+
+
+# AWS
+
+CLI & SDK
+
+IAM
+- group & user
+- role
+- policy
+
+EC2
+- security group
+- ssh
+- ENI
+- role
+
+VPC
+- CIDR
+
+
+
+
+
+Route 53
+- A Record
+- Alias Record
+
+
+ELB 
+- ALB & NLB
+- target group
+
+
+
+API Gateway
+- 
+
+CloudWatch vs Datadog
+
+
+CloudFront
+
+
+VM vs Docker vs Container
+- ECS
+
+
