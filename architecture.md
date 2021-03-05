@@ -53,7 +53,7 @@
 
 
 - Fault-tolerance
-  - HA
+  - HA (failure remapping???)
     - MasterNode + ZooKeeper
     - Worker
   - 代码层面
