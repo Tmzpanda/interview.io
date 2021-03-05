@@ -107,3 +107,10 @@ systemctl enable httpd.service
 curl localhost:80
 
 ```
+
+
+# aws-basics
+
+* **[Kinesis](https://aws.amazon.com/kinesis/?nc=sn&loc=0)**
+  - [Log Analytics Solution](https://aws.amazon.com/getting-started/hands-on/build-log-analytics-solution/)
+    - Kinesis Agent(installed on EC2) produces Log Files to Kinesis Firehose(connected with S3)
