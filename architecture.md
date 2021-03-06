@@ -1,4 +1,4 @@
-# architecture
+# Architecture
 ```
 - Application (Pipeline)
 - Platform (DevOps)
@@ -119,7 +119,7 @@ Platform图
 
 
 
-# 集群物理资源 Infra：
+# Infra：
   - Kafka partition
   - HBase 
     - cluster
