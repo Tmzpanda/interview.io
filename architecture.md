@@ -1,7 +1,9 @@
+# architecture
 ```
-Application (Pipeline)
-Platform (DevOps) -  
-Infra
+- Application (Pipeline)
+- Platform (DevOps)
+- Infra
+
 
 ```
 
@@ -37,6 +39,7 @@ Infra
 
 # Platform
 
+![devops-platform](img/devops-platform.jpg)
 Platform图
 
 
