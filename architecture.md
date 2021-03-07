@@ -2,7 +2,7 @@
 ```
 - Application (Pipeline)
 - Platform (DevOps)
-- Infra
+- Infra (K8s)
 
 
 ```
@@ -24,17 +24,8 @@
   Kafka         -->        Structured Streaming          -->          HBase (DB)
   FINEOS
  
-
-
-
-
-
+ 
 ```
-
-
-
-
-
 
 
 # Platform
