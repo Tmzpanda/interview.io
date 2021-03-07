@@ -46,7 +46,7 @@ spark-submit
 
 ## DAG
 1. 宽窄依赖        
-  ![wide-narrow-dependency](img/shuffle.png)
+  ![wide-narrow-dependency](img/spark-wide-dependency.png)
   - 宽依赖：一个父RDD partition对应多个子RDD partition, 有shuffle(一个父分区经过shuffle划分到子RDD不同分区)
   - 窄依赖：一个父RDD partition对应一个子RDD partition.
   
