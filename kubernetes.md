@@ -14,7 +14,9 @@
   - 微服务不同模块的软件依赖、网络配置、资源需求等各不相同，Docker CLI不能管理大规模的容器系统，需要容器编排系统来管理一个集群上运行的宿主机和容器。集群抽象。
 
 
-2. 架构
+<img src="img/kubernetes-architecture.png" width="80%" height="80%">
+
+2. 架构      
 - Master
   - API Server
   - Scheduler: 监视没有分配节点的新创建的 Pod，选择一个节点供他们运行。
