@@ -63,7 +63,13 @@ Platform图
 - Manage多条??: 
   - Nexus repository??
   - CI/CD看同时运行的pipeline？Docker? Monitor??
-  - Airflow schedule?？？ 应用场景：新数据trigger某个job？？
+  - Airflow schedule ?？？ 应用场景：新数据trigger某个job？？
+
+
+airflow orcheestration
+Apache Airflow is not a DevOps tool. It is a workflow orchestration tool primarily designed for managing “ETL” jobs in Hadoop environments. It basically will execute commands on the specified platform and also orchestrate data movement. It was never designed to do anything remotely similar to Jenkins or Gitlab.
+
+
 
 
 ## Monitor: 
