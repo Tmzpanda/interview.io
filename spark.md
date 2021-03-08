@@ -105,7 +105,7 @@ spark-submit
     - 预聚合 reduceByKey(combiner)代替groupByKey(没有combiner)
     - join避免shuffle
       - co-partition (如果join之前，rdd1进行reduceByKey, 将此partitioner设置为另外一个rdd2的partitioner)
-      - broadcast + map (大小表)
+      - [broadcast + map (大小表)](https://blog.csdn.net/zsw7181084/article/details/52254388)
       - hot key  
         - 几个数据量过大的key：采样倾斜key并分拆join操作，最后union。
         - 大量倾斜key：两阶段聚合（局部聚合+全局聚合），将原本相同的key通过附加随机前缀的方式，变成多个不同的key，就可以让原本被一个task处理的数据分散到多个task上去做局部聚合，进而解决单个                        task处理数据量过多的问题。接着去除掉随机前缀，再次进行全局聚合，就可以得到最终的结果。
