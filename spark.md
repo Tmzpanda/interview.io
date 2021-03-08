@@ -76,6 +76,8 @@ spark-submit
   - transformation(lazy)
     - map, flatmap(一对多), mapPartitions
     - reduceByKey（预聚合）, distinct, groupByKey, aggregateByKey, sortByKey, sortBy, coalesce, repartition, join, cogroup, intersection, subtractByKey
+      - [groupByKey, reduceByKey, aggregateByKey区别](https://www.jianshu.com/p/7261758d8ccb)
+
     - cache, persist 
       - cache = persist(MEMORY_ONLY)
       - persist指定缓存方式: MEMORY_ONLY, MEMORY_AND_DISK, MEMORY_ONLY_SER, MEMORY_AND_DISK_SER, DISK_ONLY
