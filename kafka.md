@@ -78,7 +78,7 @@ API
   - exactly once, kafka->kafka workflows using Stream API
   
 
-3. Consumer API
+3. Consumer API (在0.9.0版本后就统一了consumer api，不在区分high-level和low-level, 最新版本为kafka_2.7)
   - High Level API: 
     - 它屏蔽了Topic的每个Partition的Offset管理(意味着，1.消费过的数据无法再次消费，如果想要再次消费数据，要么换另一个group 2.必须记录每次消费的位置，提交                                     TopicAndPartition的offset),
     - Broker失败转移, 
