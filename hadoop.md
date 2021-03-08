@@ -11,13 +11,13 @@
       - 解决方案：merge: [Hadoop Archive，Sequence file和CombineFileInputFormat](https://developer.aliyun.com/article/373605).
 
 ## 2. node、读写流程
-  - name node/metadata/memory
+  - name node: metadata/memory
      - SPOF
         - 1.x secondary namenode/checkpoint/fsimage and edits
         - 2.x HA standby namenode
      - HDFS Federation/multiple independent namenodes
 
-  - data node/store data as blocks/disk
+  - data node: store data as blocks/disk
     - SPOF/replicas
     
   - 读写流程
@@ -57,8 +57,10 @@
 
 # MapReduce
 1. 资源管理
-  - 1.x/JobTracker/TaskTacker
-  - 2.x/Yarn/resource manager/node manager/application master daemons
+  - 1.x
+    - JobTracker
+    - TaskTacker
+  - 2.x: Yarn
 
 2. 阶段
   - mapper/extract info into k-v pairs/local disk输出数据在本地磁盘，等待reducer拉取
