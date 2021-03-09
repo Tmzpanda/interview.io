@@ -38,9 +38,19 @@ Platform图
 - 代码dev
   - 连接kafka
   - 连接mysql
+  - 连接FINOS
 
 - Debug
   - connection between IDE and data environment
+
+
+- test
+  - unit test, regression test
+  - ist
+  - uat
+
+- spark/streaming job挂了 ？ 看log？monitor？
+
 
 
 
@@ -48,17 +58,37 @@ Platform图
   - CI: GitLab + Jenkins + Job Server RestAPI(返回execution summary)
   - CI + CD (dev, QA, prod 依次部署？？) -> docker kubernetes
   - 没有版本更新 单纯run一遍job
-  - 新数据trigger某个job
+  - 新数据trigger某个job如何设置？？
 
 
+
+## batch job automation
 - Manage多条??: 
   - Nexus repository??
   - CI/CD看同时运行的pipeline？Docker? Monitor??
   - Airflow schedule ?？？ 应用场景：新数据trigger某个job？？
+  - Job server???
 
 
-airflow orcheestration
-Apache Airflow is not a DevOps tool. It is a workflow orchestration tool primarily designed for managing “ETL” jobs in Hadoop environments. It basically will execute commands on the specified platform and also orchestrate data movement. It was never designed to do anything remotely similar to Jenkins or Gitlab.
+
+job server
+- execution summary
+- recover machinism
+- log hdfs path
+
+
+
+- scheduling spark jobs on a timely basis  
+- trigger
+
+autosys - define, schedule, monitor
+used for controlling the unattended execution of a batch processing instructions which includes series of a program being executed at once.
+crontab - running scheduled sparrk job periodically # cron
+azkaban
+
+Recovery mechanism and error management
+monitor the executions and analyze the results
+
 
 
 
@@ -84,10 +114,14 @@ Apache Airflow is not a DevOps tool. It is a workflow orchestration tool primari
       - metrics
     - logs (specify a location to deliver Spark driver, worker, and event logs)
 
-
+一个app多个sparkcontext 几个jobid?
 
 
 - Alert: SparkListener 记录log 报警jira 和email
+
+
+
+Data quality
 
 
 
@@ -99,11 +133,26 @@ Apache Airflow is not a DevOps tool. It is a workflow orchestration tool primari
 
   - 软件架构 
     - exactly once语义
+    
     - spark streaming checkpoint恢复机制？场景：宕机了恢复的过程    
     - kafka offset监控？场景：宕机了从哪开始读 
   
   
   - 代码层面 - log监控???
+    - replay???
+
+
+## data quality
+- 业务层面
+
+
+deequ
+- constraints suggestion
+- anomaly detection
+- validation rules
+
+
+
   
 
 
