@@ -10,10 +10,9 @@ TaskScheduler
 Job -> Stage -> Task
 
 ```
+
+
 ---
-
-
-
 ## 运行原理
 1. 流程：
   - 构建SparkApplication的运行环境（启动SparkContext），SparkContext向ResourceManager（可以是Standalone、YARN）注册并申请运行Executor资源。（Application不能跨应用程序共享数据）
@@ -43,7 +42,6 @@ spark-submit
       - minimize network latency between the drivers and the executors
       - Master可以使用–supervise对Driver进行监控，如果Driver挂了可以自动重启
 
-
 ## DAG
 1. 宽窄依赖        
   ![wide-narrow-dependency](img/spark-wide-dependency.png)
@@ -56,7 +54,8 @@ spark-submit
   - stage内部多个tasks（stage内部窄依赖，pipeline），然后这些task提交给executor进行计算执行（结果返回给Driver汇总或存储）。
   
  
- 
+
+
 ---
 ## RDD 
 1. partition
@@ -69,7 +68,7 @@ spark-submit
       
 2. 容错性(Resilient)
   - 基于lineage: 一个RDD出错，那么可以从它的所有父RDD重新计算所得。如果一个RDD仅有一个父RDD（即窄依赖）,那么这种重新计算的代价会非常小。
-  - 基于checkpoint: 宽依赖得到的结果是很昂贵的，Spark将此结果持久化到磁盘上了，以备后面使用。
+  - 基于checkpoint: 基于lineage的计算浪费性能（DAG过长或宽依赖），checkpoint到hdfs上。
   
   
 3. transformations & actions
@@ -87,7 +86,7 @@ spark-submit
     - reduce, count, take, collect, foreach
     - saveAsTextFile
     
-
+    
 ## Shuffle
 1. partitioner
   - HashPartitioner(default), 算法hash(key)% reduce tasks, 数据倾斜
@@ -112,11 +111,11 @@ spark-submit
                 
 4. [shuffle机制（序列化，磁盘io，网络io）](https://zhuanlan.zhihu.com/p/70331869)
   - HashShuffleManager（弃用）
-    - consolidate机制
+    - 普通：M（map task的个数）x R（reduce task的个数）, 小文件过多，耗时低效的IO操作, OOM，读写文件以及缓存过多
+    - consolidate机制: C（core的个数）x R（reduce的个数）
   - SortShuffleManager
-    - 普通
-    - bypass机制
-
+    - 普通: 2(磁盘文件、索引文件) x M（map task的个数）
+    - bypass机制: 2 x M（map task的个数）
 
 
 ## 性能调优
@@ -125,7 +124,6 @@ spark-submit
   - 使用mapPartitions替代普通map，特别是在写DB的时候，避免每条写记录都new一个connection
   - 使用filter之后进行coalesce操作，减少小文件数量
 3. 解决数据倾斜
-
 
   
 ## Shared variables
@@ -136,20 +134,16 @@ spark-submit
   - 变量副本传到远程集群执行，这些变量更新不会传回driver（计算移动)。driver可以读取累加器的值。
   - 一个比较经典的应用场景是用来在Spark Streaming应用中记录某些事件的数量  
   
-  
-
-
-
-
+ 
+ 
+ 
 ---
-
 ## MapReduce vs Spark
 1. 运算：MapReduce基于磁盘（中间结果落到磁盘，IO、序列化反序列化开销大），SparkRDD基于内存（存取速度快）
 2. 编程范式：Map+Reduce vs Transformation+Action
 3. Task: MapReduce task以进程维护（数秒启动），Spark以线程维护
 
   
-
 ## topK全局有序
 1. sortByKey + partitioner
   - partitioner根据数据范围来分区，使得p1所有数据小于p2，p2所有数据小于p3, sortByKey保证partition内部有序
@@ -157,15 +151,19 @@ spark-submit
 
 
 
+
 ---
-  
 ## RDD, DF, DS
 [转换](https://blog.csdn.net/muyingmiao/article/details/102963103)                  
 
 [操作](https://github.com/Tmzpanda/spark-demo/blob/master/src/main/scala/com/tmzpanda/spark/sparksql/DataFrame_Functions.scala)
 
 
-# Streaming
+
+
+
+---
+## Streaming
 
 - structured streaming read from kafka
 ```scala
@@ -226,6 +224,32 @@ val query = df.writeStream
   
 */
 ```
+
+
+    - 
+ 
+## [Exactly-once](https://docs.microsoft.com/en-us/azure/hdinsight/spark/apache-spark-streaming-exactly-once)
+- source: kafka
+  - offset管理
+    - ```enable.auto.commit```
+      - true 则根据```auto.commit.interval.ms```的频率自动提交，会出现的问题是，消息可能已经从kafka读到但spark还没处理完
+      - 建议设置false，手动提交
+    - 
+  
+- spark
+  - reliable receiver persists its state into fault-tolerant storage
+    - [WAL](https://docs.cloudera.com/runtime/7.2.6/developing-spark-applications/topics/spark-streaming-fault-tolerance.html): 
+      - received event is first written to Spark's checkpoint directory in fault-tolerant storage, in case when data was received but not processed before driver's         failure (the data is automatically available for reprocessing after streaming context recovery), provides fault tolerance for failures of both the driver           and the executors(replica of the event data)
+  - driver process that manages the long-running job.
+    - checkpoint: 
+      - save the progress of the job so you can resume it later. 
+      - metadata checkpoint: recover streaming context for failed driver node. The DAG metadata includes the configuration used to create the streaming application,         the operations that define the application, and any batches that are queued but not yet completed.
+      - data checkpoint: store less data (without dependencies) than in the case of caching
+      
+
+- idempotent sink: HBase
+
+
 
 
 
