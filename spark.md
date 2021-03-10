@@ -196,6 +196,7 @@ val windowedCounts = words
 /*
 - window: aggregation 
 - watermark: late data(ProcessingTime比EventTime晚），更新其对应的ResultTable的记录。
+- stateful operator
 
 */
 ```
@@ -204,9 +205,9 @@ val windowedCounts = words
 - write stream to hbase
 ```scala
 val query = df.writeStream
-  .option("checkpointLocation", "path/to/checkpoint/dir")
+  .option("checkpointLocation", "path/to/checkpoint/dir")   // checkpoint uniquely identifies a query, each query must have a different checkpoint location.
   .trigger(Trigger.ProcessingTime("10 seconds"))  // trigger
-  .foreach(writeToHBase)          //
+  .foreach(writeToHBase)          
   .outputMode("complete")                         // 输出模式
   .start()                                     
   .awaitTermination()
@@ -226,28 +227,9 @@ val query = df.writeStream
 ```
 
 
-    - 
- 
-## [Exactly-once](https://docs.microsoft.com/en-us/azure/hdinsight/spark/apache-spark-streaming-exactly-once)
-- source: kafka
-  - offset管理
-    - ```enable.auto.commit```
-      - true 则根据```auto.commit.interval.ms```的频率自动提交，会出现的问题是，消息可能已经从kafka读到但spark还没处理完
-      - 建议设置false，手动提交
-    - 
-  
-- spark
-  - reliable receiver persists its state into fault-tolerant storage
-    - [WAL](https://docs.cloudera.com/runtime/7.2.6/developing-spark-applications/topics/spark-streaming-fault-tolerance.html): 
-      - received event is first written to Spark's checkpoint directory in fault-tolerant storage, in case when data was received but not processed before driver's         failure (the data is automatically available for reprocessing after streaming context recovery), provides fault tolerance for failures of both the driver           and the executors(replica of the event data)
-  - driver process that manages the long-running job.
-    - checkpoint: 
-      - save the progress of the job so you can resume it later. 
-      - metadata checkpoint: recover streaming context for failed driver node. The DAG metadata includes the configuration used to create the streaming application,         the operations that define the application, and any batches that are queued but not yet completed.
-      - data checkpoint: store less data (without dependencies) than in the case of caching
-      
 
-- idempotent sink: HBase
+ 
+
 
 
 
