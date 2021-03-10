@@ -64,10 +64,10 @@
 - spark-sql-kafka-0-10_2.12 (structure streaming)
     - 对比 DStream: 
         - DStream 只能保证自己的一致性语义是 exactly-once 的，而 input 接入 Spark Streaming 和 Spark Straming 输出到外部存储的语义往往需要用户自己来保证。比如为了保证 output 的语义是 exactly-once 语义需要 output 的存储系统具有幂等的特性，或者支持事务性写入。
-        - Structured Streaming 和内置的 connector 使的 end-to-end 程序写起来非常的简单，而且 "correct by default"。数据源和 sink 满足 "exactly-once" 语义，这样我们就可以在此基础上更好地和外部系统集成。性能方面，通过复用 Spark SQL Engine 来保证高性能。
+        - Structured Streaming 和内置的 connector 使的 end-to-end 程序写起来非常的简单，而且 "correct by default"。数据源和 sink 满足 "exactly-once" 语义，这样我们就可以在此基础上更好地和外部系统集成。性能方面，通过复用 Spark SQL Engine 来保证高性能。[内部原理参考](https://www.jianshu.com/p/a3de2ac76daf)
     - exactly-once
         - streaming source: offset to track the read position in the stream, replayable
-        - execution engine: checkpointing and WAL to record the offset range of the data being processed in each trigger
+        - execution engine: checkpointing and WAL (offsetLog) to record the offset range of the data being processed in each trigger
         - streaming sinks: idempotent 
 
      
