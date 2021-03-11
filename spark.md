@@ -125,6 +125,7 @@ spark-submit
   - 使用filter之后进行coalesce操作，减少小文件数量
 3. 解决数据倾斜
 
+
   
 ## Shared variables
 1. broadcast：
