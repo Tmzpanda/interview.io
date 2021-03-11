@@ -34,22 +34,7 @@
 Platform图
 
 
-## Dev
-- 代码dev
-  - 连接kafka
-  - 连接mysql
-  - 连接FINOS
 
-- Debug
-  - connection between IDE and data environment
-
-
-- test
-  - unit test, regression test
-  - ist
-  - uat
-
-- spark/streaming job挂了 ？ 看log？monitor？
 
 
 
@@ -91,76 +76,63 @@ monitor the executions and analyze the results
 
 
 
+Job history and configuration logged to a database
+
+
+Job history and configuration logged to a database
+logs (specify a location to deliver Spark driver, worker, and event logs)
 
 
 ## Monitor: 
-  - 对象：
-    - core infrastructure metrics
-    - app performance metrics
-    - 同时监控多条运行状态？？？
-    - 
-  - 目的
-    - cluster performance stats
-    - design optimizaiton
-    - failures alert
-    - troubleshoot failures
-    
-  - 手段
-    - Ambari/Yarn/Spark UI
-      - metrics
-      - 
-    - RestAPI
-    - Metric Sink + Graphite Gafana
-      - metrics
-    - logs (specify a location to deliver Spark driver, worker, and event logs)
+- 目的
+  - design optimizaiton
+  - failures alert
+  - troubleshoot failures
 
-一个app多个sparkcontext 几个jobid?
-
-
-- Alert: SparkListener 记录log 报警jira 和email
-
-
-
-Data quality
-
-
-
-## Fault-tolerance （data pipeline quality??）
-  - HA (failure remapping???) 物理资源
-    - MasterNode + ZooKeeper
-    - Worker
-
-
-  - 软件架构 
-    - exactly once语义
-    
-    - spark streaming checkpoint恢复机制？场景：宕机了恢复的过程    
-    - kafka offset监控？场景：宕机了从哪开始读 
+- 手段
+  - Ambari/Yarn/Spark UI
+  - RestAPI
+  - [Metric Sink + Graphite Gafana](https://spark.apache.org/docs/latest/monitoring.html#metrics)
+  - SparkListener/StreamingQueryListener
+  - Log
   
-  
-  - 代码层面 - log监控???
-    - replay???
+- metrics
+  - core infrastructure metrics
+  - app performance metrics
+
+- 
+e.g. 
+1. [Spark执行卡住或过慢时](http://jason4zhu.blogspot.com/2018/05/spark-slow-debug-on-yarn-webpage.html)
+2. [数据倾斜](https://tech.meituan.com/2016/05/12/spark-tuning-pro.html)
+3. [性能调优](https://www.cnblogs.com/xinfang520/p/8033958.html)
+
+
+
+    
+
+## Dev
+- 代码dev
+  - 连接kafka
+  - 连接mysql
+  - 连接FINOS
+
+- Debug
+  - connection between IDE and data environment
+
+- test
+  - unit test, regression test
+  - ist
+  - uat
+
+- spark/streaming job挂了 ？ 看log？monitor？
+
+
 
 
 ## data quality
-- 业务层面
-
-
-deequ
-- constraints suggestion
-- anomaly detection
-- validation rules
-
-
-
-  
-
-
-
-
-
-
-
+[deequ](https://github.com/awslabs/deequ)
+- explicitly state assumptions on data, add checks that define constriants on attributes.
+- constraints verification, anomaly detection, validation rules
 
 
 
@@ -168,7 +140,8 @@ deequ
 # Infra：
   - Kafka partition
   - HBase 
-    - cluster
-    - table个数
-        
-  - 
+    - 10TB/week
+    - 3 major table: case, claim, repeal
+    - 3 column families with maximum 200 columns
+    - automatic major compaction disabled
+
