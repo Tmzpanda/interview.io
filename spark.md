@@ -125,6 +125,13 @@ spark-submit
   - 使用filter之后进行coalesce操作，减少小文件数量
 3. 解决数据倾斜
 
+## SparkUI
+spark-submit 提交的就是一个 application,  RDD 进行 action操作时，就会产生一个Job, 每一个Job 又会根据 shuffle 操作，分为多个stage. 一个stage会根据RDD的分区数，分为多个task。
+- e.g.1: job, stage, tasks
+- e.g.2: executor
+
+
+
 
   
 ## Shared variables
