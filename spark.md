@@ -29,7 +29,7 @@ spark-submit
   [appliccation-arguments]
   
   -- num-executors
-  -- totoal-executor-cores  
+  -- executor-cores  
   -- executor-memory
   
 ```
@@ -123,17 +123,14 @@ spark-submit
 2. 高性能算子
   - 使用mapPartitions替代普通map，特别是在写DB的时候，避免每条写记录都new一个connection
   - 使用filter之后进行coalesce操作，减少小文件数量
-3. 解决数据倾斜
-
-## SparkUI
-spark-submit 提交的就是一个 application,  RDD 进行 action操作时，就会产生一个Job, 每一个Job 又会根据 shuffle 操作，分为多个stage. 一个stage会根据RDD的分区数，分为多个task。
-- e.g.1: job, stage, tasks
-- e.g.2: executor
-
+3. 减少shuffle; 避免数据倾斜
+4. SparkUI
+  - 卡在stage, task数量很少，```spark.sql.shuffle.partitions```, ```spark.default.parallelism```
+  - 当前stage各个task分配数据量不均匀，数据倾斜。
+  - executor界面 task time (GC Time)飘红，则可能当前executor中并发的task过多，```executor.memory```, ```executor.cores```,减少core数量，变相提高每个task可使用内存。
 
 
 
-  
 ## Shared variables
 1. broadcast：
   - 在每台计算机上保留一个只读变量，而不是将其副本与任务一起发送。
