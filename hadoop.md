@@ -53,6 +53,14 @@
                  支持谓词下推（predicate pushdown，从磁盘读取数据就过滤数据记录，而不是载入内存再过滤），可以进一步降低磁盘I/O开销。 
           - 缺点：压缩率比ORC低，查询效率比ORC低，不支持update, insert和ACID.
 
+    - [Hive文件存储格式](https://github.com/Tmzpanda/interview.io/blob/main/hive.md#%E8%A1%A8%E7%B1%BB%E5%9E%8B%E5%92%8C%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F)
+
+  - 结构化 vs 半结构化
+    - 结构化：csv, RDBMS
+    - 半结构化：json, xml
+  - SQL vs NoSQL
+
+
 
 
 # MapReduce
