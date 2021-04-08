@@ -58,7 +58,7 @@
   - 结构化 vs 半结构化
     - 结构化：csv, RDBMS
     - 半结构化：json, xml
-  - SQL vs NoSQL
+  - [SQL vs NoSQL](https://github.com/Tmzpanda/system-design/blob/main/overview.md#sql-vs-nosql)
 
 
 
