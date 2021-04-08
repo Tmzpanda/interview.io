@@ -51,8 +51,8 @@
 - explicitly state assumptions on data, add checks that define constriants on attributes.
 - constraints verification, anomaly detection, validation rules
 
----
 
+---
 
 
 ## CI/CD
@@ -122,8 +122,9 @@ logs (specify a location to deliver Spark driver, worker, and event logs)
 
 ---
 
-# Infra：
-  - Kafka partition
+
+## Infra：
+  - Kafka broker个数 partition个数
   - HBase 
     - 10TB/week
     - 3 major table: case, claim, repeal
