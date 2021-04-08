@@ -53,6 +53,6 @@ STORED AS SEQUENCEFILE;  -- 文件格式
 
 ## 数据库 vs 数据仓库
 - RDB(OLTP)随机读写，设计遵循第三范式；DW(OLAP)不需要写多快，复杂查询足够快就行，允许数据冗余。
-- s
+
 
 
