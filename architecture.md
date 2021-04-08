@@ -1,7 +1,7 @@
 # Architecture
 ```
-- Application (Pipeline)
-- Platform (DevOps)
+- ETL
+- CI/CD (DevOps)
 - Infra (K8s)
 
 
@@ -9,7 +9,7 @@
 
 
 
-# Application
+# ETL
 ```
 - Batch
 
@@ -21,30 +21,45 @@
 
 - Stream
 
-  Kafka         -->        Structured Streaming          -->          HBase (DB)
+  Kafka         -->        Structured Streaming          -->          HBase (DS)
   FINEOS
  
  
 ```
 
+---
 
-# Platform
+## Dev
+- 代码dev
+  - 连接kafka
+  - 连接mysql
+  - 连接FINOS
 
-![devops-platform](img/devops-platform.jpg)
-Platform图
+- Debug
+  - connection between IDE and data environment
+
+- test
+  - unit test, regression test
+  - ist
+  - uat
+
+- spark/streaming job挂了 ？ 看log？monitor？
+
+
+## data quality
+[deequ](https://github.com/awslabs/deequ)
+- explicitly state assumptions on data, add checks that define constriants on attributes.
+- constraints verification, anomaly detection, validation rules
+
+---
 
 
 
-
-
-
-
-## Deploy CI/CD
+## CI/CD
   - CI: GitLab + Jenkins + Job Server RestAPI(返回execution summary)
   - CI + CD (dev, QA, prod 依次部署？？) -> docker kubernetes
   - 没有版本更新 单纯run一遍job
   - 新数据trigger某个job如何设置？？
-
 
 
 ## batch job automation
@@ -74,13 +89,11 @@ azkaban
 Recovery mechanism and error management
 monitor the executions and analyze the results
 
-
-
-Job history and configuration logged to a database
-
-
 Job history and configuration logged to a database
 logs (specify a location to deliver Spark driver, worker, and event logs)
+
+
+---
 
 
 ## Monitor: 
@@ -100,42 +113,14 @@ logs (specify a location to deliver Spark driver, worker, and event logs)
   - core infrastructure metrics
   - app performance metrics
 
-- 
-e.g. 
-1. [Spark执行卡住或过慢时](http://jason4zhu.blogspot.com/2018/05/spark-slow-debug-on-yarn-webpage.html)
-2. [数据倾斜](https://tech.meituan.com/2016/05/12/spark-tuning-pro.html)
-3. [性能调优](https://www.cnblogs.com/xinfang520/p/8033958.html)
+- examples:
+  - 卡在stage, task数量很少，spark.sql.shuffle.partitions, spark.default.parallelism
+  - 当前stage各个task分配数据量不均匀，数据倾斜。
+  - executor界面 task time (GC Time)飘红，则可能当前executor中并发的task过多，executor.memory, executor.cores,减少core数量，变相提高每个task可使用内存。
 
 
 
-    
-
-## Dev
-- 代码dev
-  - 连接kafka
-  - 连接mysql
-  - 连接FINOS
-
-- Debug
-  - connection between IDE and data environment
-
-- test
-  - unit test, regression test
-  - ist
-  - uat
-
-- spark/streaming job挂了 ？ 看log？monitor？
-
-
-
-
-## data quality
-[deequ](https://github.com/awslabs/deequ)
-- explicitly state assumptions on data, add checks that define constriants on attributes.
-- constraints verification, anomaly detection, validation rules
-
-
-
+---
 
 # Infra：
   - Kafka partition
@@ -144,4 +129,11 @@ e.g.
     - 3 major table: case, claim, repeal
     - 3 column families with maximum 200 columns
     - automatic major compaction disabled
+    
+
+
+
+
+
+
 
