@@ -1,3 +1,20 @@
+
+/**************************************************** scala collection ********************************************************/
+object Solution {
+    def topKFrequent(nums: Array[Int], k: Int): Array[Int] = {
+        nums
+          .groupBy(x => x)
+          .values
+          .toArray
+          .sortWith{ case (a,b) => a.length.compareTo(b.length) > 0 }
+          .map(_.head)
+          .take(k)
+  }
+}
+
+
+
+
 /**************************************************** create dataframe ********************************************************/
 // Seq
 val df = Seq(("DEPT1", 1000), ("DEPT1", 500), ("DEPT1", 700), ("DEPT2", 400), ("DEPT2", 200),  ("DEPT3", 500), ("DEPT3", 200))
@@ -81,7 +98,6 @@ df.groupBy($"department").agg(count($"eid"), mean($"salary")).show
 
 
 // filter
-
 val items = List("a", "b", "c")
 val items = df1.select("department").distinct.map(x=>x.getString(0)).collect.toList
 df.filter(!$"department".isin(items:_*))   // unpack the list into arguments with the :_* operator
