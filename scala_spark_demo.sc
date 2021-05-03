@@ -1,26 +1,62 @@
-
 /**************************************************** scala collection ********************************************************/
-object Solution {
-    def topKFrequent(nums: Array[Int], k: Int): Array[Int] = {
-        nums
-          .groupBy(x => x)
-          .values
-          .toArray
-          .sortWith{ case (a,b) => a.length.compareTo(b.length) > 0 }
-          .map(_.head)
-          .take(k)
-  }
+// Array
+val arr = Array("a", "b", "b", "b", "c", "c")
+arr.groupBy(identity).mapValues(_.size).toSeq.sortBy(_._2).reverse.map(_._1).take(3)
+
+
+// Seq
+val seq = Seq(("DEPT1", 1000), ("DEPT1", 500), ("DEPT1", 700), ("DEPT2", 400), ("DEPT2", 200),  ("DEPT3", 500), ("DEPT3", 200))
+seq.map(e => (e._1, e._2 + 100))
+seq.toMap
+seq(2).getClass
+
+val seq2 = ("DEPT0", 400) +: seq :+ ("DEPT4", 300)
+val seq3 = seq ++ seq2
+
+
+// ArrayBuffer
+import scala.collection.mutable.ArrayBuffer
+val arr = ArrayBuffer(1, 2, 3)
+arr += 4
+
+
+// Set 
+import scala.collection.mutable.Set
+val set = Set(1, 2, 3, 4)
+set -= 4
+set --= List(2, 3)
+
+// Map
+import scala.collection.mutable.Map
+val map = Map("AL" -> "Alabama")
+map += ("AR" -> "Arkansas")
+map -= "AL"
+map.getOrElse("IL", "Not Found")
+
+
+
+// function
+def topKFrequent(nums: Array[String], k: Int): Array[String] = {
+  nums
+  .groupBy(identity)
+  .mapValues(_.size)
+  .toArray
+  .sortBy(_._2)
+  .reverse
+  .map(_._1)
+  .take(k)
 }
-
-
+topKFrequent(nums, k)
 
 
 /**************************************************** create dataframe ********************************************************/
 // Seq
+import spark.implicits._
 val df = Seq(("DEPT1", 1000), ("DEPT1", 500), ("DEPT1", 700), ("DEPT2", 400), ("DEPT2", 200),  ("DEPT3", 500), ("DEPT3", 200))
          .toDF("department", "salary")
 
 // csv
+import spark.implicits._
 val df = spark
         .read
         .option("header", "true")
@@ -63,22 +99,19 @@ val df = spark.read
 val rdd = sc.parallelize(Seq(("Sales", 101, 30000), ("IT", 203, 40000)))
 val rdd = sc.textFile("file.txt")
 
-val df = spark.createDataFrame(rdd, schema).show
+import spark.implicits._
 val df = rdd.toDF("department", "eid", "salary")
+val df = spark.createDataFrame(rdd).toDF("department", "eid", "salary")
 
 
-// dataset
-// type safe, df=df[Row]
+// Dataset -> type safe 
+// Dataframe: Dataset[Row]
 case class Record (department: String, eid: Double, salary: Double)
+import spark.implicits._
 val ds = df.as[Record]  // implicit conversion
 
 val data = Seq(Person("Bob", 21), Person("Mandy", 22), Person("Julia", 19))
 val ds = spark.createDataset(data)
-
-
-
-
-
 
 
 
