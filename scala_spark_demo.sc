@@ -31,6 +31,7 @@ import scala.collection.mutable.Map
 val map = Map("AL" -> "Alabama")
 map += ("AR" -> "Arkansas")
 map -= "AL"
+map.get("AR")    // Option[T]
 map.getOrElse("IL", "Not Found")
 
 
