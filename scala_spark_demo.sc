@@ -50,6 +50,38 @@ def topKFrequent(nums: Array[String], k: Int): Array[String] = {
 topKFrequent(nums, k)
 
 
+// recursion and tail recursion
+def factorial(n: Int): Int = {
+  if (n <= 1) 1
+  else n * factorial(n - 1)
+}
+
+import scala.annotation.tailrec
+def tailRecFactorial(n: Int): BigInt = {
+    @tailrec
+    def factorialHelper(x: Int, accumulator: BigInt): BigInt = {
+      if (x <= 1) accumulator
+      else factorialHelper(x - 1, x * accumulator)
+    }
+    factorialHelper(n, 1)
+  }
+
+// level order traversal
+object Solution {
+  def levelOrder(root: TreeNode): List[List[Int]] = levelOrder(Option(root).toList)
+
+  @scala.annotation.tailrec
+  private def levelOrder(nodes: List[TreeNode], traversal: List[List[Int]] = List()): List[List[Int]] = {
+    if (nodes.nonEmpty) {
+      levelOrder(nodes.flatMap(node => Seq(Option(node.left), Option(node.right)).flatten), traversal :+ nodes.map(_.value))
+    } else {
+      traversal
+    }
+  }
+}
+
+
+
 /**************************************************** create dataframe ********************************************************/
 // Seq
 import spark.implicits._
